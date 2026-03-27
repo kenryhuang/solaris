@@ -1,6 +1,6 @@
-import { useRef, useMemo } from 'react';
+import { useRef, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Sphere, useTexture } from '@react-three/drei';
+import { useTexture } from '@react-three/drei';
 import * as THREE from 'three';
 import type { CelestialBody as CelestialBodyType } from '../../types/celestial';
 import { useSimulationStore } from '../../stores/simulationStore';
@@ -22,14 +22,6 @@ export function CelestialBody({ body, onClick }: CelestialBodyProps) {
   const texture = useTexture(body.textureUrl);
   texture.colorSpace = THREE.SRGBColorSpace;
 
-  // Calculate orbital position
-  const [position, setPosition] = useMemo(() => {
-    if (body.semiMajorAxis === 0) {
-      return [[0, 0, 0] as [number, number, number], null];
-    }
-    return [[0, 0, 0] as [number, number, number], null];
-  }, [body.semiMajorAxis]);
-
   // Animation frame
   useFrame((state, delta) => {
     if (!meshRef.current || !groupRef.current) return;
@@ -42,7 +34,7 @@ export function CelestialBody({ body, onClick }: CelestialBodyProps) {
 
     // Orbital motion
     if (!isPaused && body.semiMajorAxis > 0 && body.orbitalPeriod > 0) {
-      const time = elapsedTime + (isPaused ? 0 : delta * 0.1 * orbitMultiplier);
+      const time = elapsedTime + delta * 0.1 * orbitMultiplier;
       const meanAnomaly = calculateMeanAnomaly(time, body.orbitalPeriod);
       const [x, y, z] = calculateOrbitalPosition({
         semiMajorAxis: scaleDistance(body.semiMajorAxis),
@@ -55,7 +47,7 @@ export function CelestialBody({ body, onClick }: CelestialBodyProps) {
   });
 
   // Initial position for static bodies
-  useMemo(() => {
+  useEffect(() => {
     if (groupRef.current && body.semiMajorAxis > 0 && body.orbitalPeriod > 0) {
       const meanAnomaly = calculateMeanAnomaly(elapsedTime, body.orbitalPeriod);
       const [x, y, z] = calculateOrbitalPosition({
