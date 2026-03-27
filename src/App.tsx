@@ -1,9 +1,11 @@
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
+import { Suspense } from 'react';
 import { SolarSystem } from './components/scene/SolarSystem';
 import { ControlPanel } from './components/ui/ControlPanel';
 import { InfoPanel } from './components/ui/InfoPanel';
 import { CelestialSelector } from './components/ui/CelestialSelector';
+import { LoadingScreen } from './components/scene/LoadingScreen';
 
 export default function App() {
   return (
@@ -16,7 +18,9 @@ export default function App() {
           far: 1000,
         }}
       >
-        <SolarSystem />
+        <Suspense fallback={null}>
+          <SolarSystem />
+        </Suspense>
         <OrbitControls
           enableDamping
           dampingFactor={0.05}
@@ -25,6 +29,7 @@ export default function App() {
         />
       </Canvas>
 
+      <LoadingScreen />
       <CelestialSelector />
       <InfoPanel />
       <ControlPanel />
