@@ -1,6 +1,6 @@
 import type { CelestialBody } from '../types/celestial';
 import { TEXTURE_URLS } from './textures';
-import { scaleRadius, SCALE_CONFIG } from '../utils/scale';
+import { scaleRadius } from '../utils/scale';
 
 // Real astronomical data (distances in km, radii in km)
 const PLANET_RAW_DATA = {

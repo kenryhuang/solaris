@@ -18,16 +18,11 @@ export function CelestialBody({ body, onClick }: CelestialBodyProps) {
 
   const { isPaused, elapsedTime, rotationMultiplier, orbitMultiplier, timeScale } = useSimulationStore();
 
-  // Load texture
+  // Load texture (R3F handles sRGB color space automatically for textures)
   const texture = useTexture(body.textureUrl);
 
-  // Set texture colorSpace in useEffect to avoid modifying hook return value directly
-  useEffect(() => {
-    texture.colorSpace = THREE.SRGBColorSpace;
-  }, [texture]);
-
   // Animation frame
-  useFrame((state, delta) => {
+  useFrame((_, delta) => {
     if (!meshRef.current || !groupRef.current) return;
 
     // Rotation
