@@ -12,7 +12,7 @@ export function SolarSystem() {
   const advanceTime = useSimulationStore((state) => state.advanceTime);
 
   // Advance simulation time each frame
-  useFrame((state, delta) => {
+  useFrame((_, delta) => {
     advanceTime(delta);
   });
 
