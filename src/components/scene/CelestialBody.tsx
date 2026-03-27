@@ -16,11 +16,15 @@ export function CelestialBody({ body, onClick }: CelestialBodyProps) {
   const meshRef = useRef<THREE.Mesh>(null);
   const groupRef = useRef<THREE.Group>(null);
 
-  const { isPaused, elapsedTime, rotationMultiplier, orbitMultiplier } = useSimulationStore();
+  const { isPaused, elapsedTime, rotationMultiplier, orbitMultiplier, timeScale } = useSimulationStore();
 
   // Load texture
   const texture = useTexture(body.textureUrl);
-  texture.colorSpace = THREE.SRGBColorSpace;
+
+  // Set texture colorSpace in useEffect to avoid modifying hook return value directly
+  useEffect(() => {
+    texture.colorSpace = THREE.SRGBColorSpace;
+  }, [texture]);
 
   // Animation frame
   useFrame((state, delta) => {
@@ -34,7 +38,7 @@ export function CelestialBody({ body, onClick }: CelestialBodyProps) {
 
     // Orbital motion
     if (!isPaused && body.semiMajorAxis > 0 && body.orbitalPeriod > 0) {
-      const time = elapsedTime + delta * 0.1 * orbitMultiplier;
+      const time = elapsedTime + delta * timeScale * orbitMultiplier;
       const meanAnomaly = calculateMeanAnomaly(time, body.orbitalPeriod);
       const [x, y, z] = calculateOrbitalPosition({
         semiMajorAxis: scaleDistance(body.semiMajorAxis),
