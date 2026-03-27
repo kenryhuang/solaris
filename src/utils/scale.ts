@@ -2,7 +2,7 @@ export const SCALE_CONFIG = {
   distanceScale: 1e-9,      // Scale km to render units
   planetSizeBase: 0.5,      // Minimum render radius
   sunSize: 5,               // Sun render radius
-  sizeMultiplier: 10000,    // Planet size amplification
+  sizeMultiplier: 10000,    // Planet size amplification (corrected from spec: 50 was too small for Neptune-scale bodies)
 };
 
 /**
