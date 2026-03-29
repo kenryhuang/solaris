@@ -26,10 +26,10 @@ export function CelestialSelector() {
 
       {isOpen && (
         <div className="mt-1 bg-gray-900/95 text-white rounded-lg shadow-lg overflow-hidden w-48 max-h-96 overflow-y-auto">
-          {['star', 'planet', 'moon'].map((type) => (
+          {['star', 'planet', 'dwarf', 'moon'].map((type) => (
             <div key={type}>
               <div className="px-3 py-1 bg-gray-800 text-xs uppercase text-gray-400 font-semibold sticky top-0">
-                {type === 'star' ? 'Stars' : type === 'planet' ? 'Planets' : 'Moons'}
+                {type === 'star' ? 'Stars' : type === 'planet' ? 'Planets' : type === 'dwarf' ? 'Dwarf Planets' : 'Moons'}
               </div>
               {ALL_BODIES.filter((b) => b.type === type).map((body) => (
                 <button
