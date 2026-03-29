@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { generateAsteroidPositions, ASTEROID_BELT_CONFIG } from './asteroid';
+import { generateAsteroidPositions, generateAsteroidSizes, ASTEROID_BELT_CONFIG } from './asteroid';
 
 describe('generateAsteroidPositions', () => {
   it('generates correct number of positions', () => {
@@ -28,5 +28,27 @@ describe('generateAsteroidPositions', () => {
   it('returns empty array for zero count', () => {
     const positions = generateAsteroidPositions(0);
     expect(positions).toEqual([]);
+  });
+});
+
+describe('generateAsteroidSizes', () => {
+  it('generates correct number of sizes', () => {
+    const sizes = generateAsteroidSizes(100);
+    expect(sizes.length).toBe(100);
+  });
+
+  it('sizes are within configured range', () => {
+    const sizes = generateAsteroidSizes(50);
+    const [minSize, maxSize] = ASTEROID_BELT_CONFIG.sizeRange;
+
+    sizes.forEach((size) => {
+      expect(size).toBeGreaterThanOrEqual(minSize);
+      expect(size).toBeLessThanOrEqual(maxSize);
+    });
+  });
+
+  it('returns empty array for zero count', () => {
+    const sizes = generateAsteroidSizes(0);
+    expect(sizes).toEqual([]);
   });
 });
