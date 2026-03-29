@@ -1,5 +1,5 @@
 import type { CelestialBody } from '../types/celestial';
-import { TEXTURE_URLS } from './textures';
+import { TEXTURE_URLS, PLACEHOLDER_COLORS } from './textures';
 import { scaleRadius } from '../utils/scale';
 
 // Real astronomical data (distances in km, radii in km)
@@ -96,8 +96,63 @@ const PLANET_RAW_DATA = {
   },
 };
 
+// Dwarf planet data
+const DWARF_PLANET_RAW_DATA = {
+  pluto: {
+    name: 'Pluto',
+    radius: 1188.3,
+    semiMajorAxis: 5906380000,    // ~39.5 AU
+    orbitalPeriod: 90560,         // ~248 years
+    rotationPeriod: -6.387,       // Retrograde
+    eccentricity: 0.2488,
+    inclination: 17.16,
+    axialTilt: 122.53,
+  },
+  ceres: {
+    name: 'Ceres',
+    radius: 473,
+    semiMajorAxis: 413700000,     // ~2.77 AU (in asteroid belt)
+    orbitalPeriod: 1681.63,       // ~4.6 years
+    rotationPeriod: 0.378,
+    eccentricity: 0.076,
+    inclination: 10.59,
+    axialTilt: 4,
+  },
+  haumea: {
+    name: 'Haumea',
+    radius: 780,
+    semiMajorAxis: 6484000000,
+    orbitalPeriod: 103774,
+    rotationPeriod: 0.163,
+    eccentricity: 0.195,
+    inclination: 28.19,
+    axialTilt: 126,
+  },
+  makemake: {
+    name: 'Makemake',
+    radius: 715,
+    semiMajorAxis: 6850000000,
+    orbitalPeriod: 111767,
+    rotationPeriod: 0.95,
+    eccentricity: 0.159,
+    inclination: 28.96,
+    axialTilt: 30,
+  },
+  eris: {
+    name: 'Eris',
+    radius: 1163,
+    semiMajorAxis: 10122000000,
+    orbitalPeriod: 203830,
+    rotationPeriod: 1.08,
+    eccentricity: 0.441,
+    inclination: 44.04,
+    axialTilt: 78,
+  },
+};
+
 // Moon data
 const MOON_RAW_DATA = {
+  // Earth's Moon
   moon: {
     name: 'Moon',
     radius: 1737.4,
@@ -108,6 +163,131 @@ const MOON_RAW_DATA = {
     inclination: 5.145,
     axialTilt: 6.68,
     parentId: 'earth',
+  },
+  // Jupiter's Galilean moons
+  io: {
+    name: 'Io',
+    radius: 1821.6,
+    semiMajorAxis: 421700,
+    orbitalPeriod: 1.769,
+    rotationPeriod: 1.769,
+    eccentricity: 0.0041,
+    inclination: 0.05,
+    axialTilt: 0,
+    parentId: 'jupiter',
+  },
+  europa: {
+    name: 'Europa',
+    radius: 1560.8,
+    semiMajorAxis: 671034,
+    orbitalPeriod: 3.551,
+    rotationPeriod: 3.551,
+    eccentricity: 0.009,
+    inclination: 0.47,
+    axialTilt: 0.1,
+    parentId: 'jupiter',
+  },
+  ganymede: {
+    name: 'Ganymede',
+    radius: 2634.1,
+    semiMajorAxis: 1070412,
+    orbitalPeriod: 7.155,
+    rotationPeriod: 7.155,
+    eccentricity: 0.0013,
+    inclination: 0.2,
+    axialTilt: 0.33,
+    parentId: 'jupiter',
+  },
+  callisto: {
+    name: 'Callisto',
+    radius: 2410.3,
+    semiMajorAxis: 1882709,
+    orbitalPeriod: 16.689,
+    rotationPeriod: 16.689,
+    eccentricity: 0.0074,
+    inclination: 0.192,
+    axialTilt: 0,
+    parentId: 'jupiter',
+  },
+  // Saturn's major moon
+  titan: {
+    name: 'Titan',
+    radius: 2574.73,
+    semiMajorAxis: 1221870,
+    orbitalPeriod: 15.945,
+    rotationPeriod: 15.945,
+    eccentricity: 0.0288,
+    inclination: 0.34,
+    axialTilt: 0,
+    parentId: 'saturn',
+  },
+  // Neptune's major moon
+  triton: {
+    name: 'Triton',
+    radius: 1353.4,
+    semiMajorAxis: 354759,
+    orbitalPeriod: -5.877,        // Retrograde orbit
+    rotationPeriod: 5.877,
+    eccentricity: 0.000016,
+    inclination: 156.885,
+    axialTilt: 0,
+    parentId: 'neptune',
+  },
+  // Uranus's major moons
+  titania: {
+    name: 'Titania',
+    radius: 788.4,
+    semiMajorAxis: 435910,
+    orbitalPeriod: 8.706,
+    rotationPeriod: 8.706,
+    eccentricity: 0.0011,
+    inclination: 0.34,
+    axialTilt: 0,
+    parentId: 'uranus',
+  },
+  oberon: {
+    name: 'Oberon',
+    radius: 761.4,
+    semiMajorAxis: 583520,
+    orbitalPeriod: 13.463,
+    rotationPeriod: 13.463,
+    eccentricity: 0.0014,
+    inclination: 0.058,
+    axialTilt: 0,
+    parentId: 'uranus',
+  },
+  miranda: {
+    name: 'Miranda',
+    radius: 235.8,
+    semiMajorAxis: 129390,
+    orbitalPeriod: 1.413,
+    rotationPeriod: 1.413,
+    eccentricity: 0.0013,
+    inclination: 4.232,
+    axialTilt: 0,
+    parentId: 'uranus',
+  },
+  ariel: {
+    name: 'Ariel',
+    radius: 578.9,
+    semiMajorAxis: 190900,
+    orbitalPeriod: 2.520,
+    rotationPeriod: 2.520,
+    eccentricity: 0.0012,
+    inclination: 0.26,
+    axialTilt: 0,
+    parentId: 'uranus',
+  },
+  umbriel: {
+    name: 'Umbriel',
+    radius: 584.7,
+    semiMajorAxis: 266000,
+    orbitalPeriod: 4.144,
+    rotationPeriod: 4.144,
+    eccentricity: 0.0039,
+    inclination: 0.128,
+    axialTilt: 0,
+    parentId: 'uranus',
   },
 };
 
@@ -136,6 +316,55 @@ function buildCelestialBody(
   };
 }
 
+function buildDwarfPlanet(
+  id: string,
+  data: typeof DWARF_PLANET_RAW_DATA[keyof typeof DWARF_PLANET_RAW_DATA]
+): CelestialBody {
+  const textureKey = id as keyof typeof TEXTURE_URLS;
+  const hasTexture = TEXTURE_URLS[textureKey] !== undefined;
+
+  return {
+    id,
+    name: data.name,
+    type: 'dwarf',
+    radius: data.radius,
+    mass: 0,
+    semiMajorAxis: data.semiMajorAxis,
+    eccentricity: data.eccentricity,
+    inclination: data.inclination,
+    orbitalPeriod: data.orbitalPeriod,
+    rotationPeriod: data.rotationPeriod,
+    axialTilt: data.axialTilt,
+    textureUrl: hasTexture ? TEXTURE_URLS[textureKey] : PLACEHOLDER_COLORS[id] || '#888888',
+    renderRadius: scaleRadius(data.radius, false),
+  };
+}
+
+function buildMoon(
+  id: string,
+  data: typeof MOON_RAW_DATA[keyof typeof MOON_RAW_DATA]
+): CelestialBody {
+  const textureKey = id as keyof typeof TEXTURE_URLS;
+  const hasTexture = TEXTURE_URLS[textureKey] !== undefined;
+
+  return {
+    id,
+    name: data.name,
+    type: 'moon',
+    radius: data.radius,
+    mass: 0,
+    semiMajorAxis: data.semiMajorAxis,
+    eccentricity: data.eccentricity,
+    inclination: data.inclination,
+    orbitalPeriod: data.orbitalPeriod,
+    rotationPeriod: data.rotationPeriod,
+    axialTilt: data.axialTilt,
+    textureUrl: hasTexture ? TEXTURE_URLS[textureKey] : PLACEHOLDER_COLORS[id] || '#888888',
+    renderRadius: scaleRadius(data.radius, false),
+    parentId: data.parentId,
+  };
+}
+
 // Export planet and moon data
 export const SUN: CelestialBody = buildCelestialBody('sun', PLANET_RAW_DATA.sun, 'star', 'sun');
 
@@ -150,22 +379,42 @@ export const PLANETS: CelestialBody[] = [
   buildCelestialBody('neptune', PLANET_RAW_DATA.neptune, 'planet', 'neptune'),
 ];
 
+export const DWARF_PLANETS: CelestialBody[] = [
+  buildDwarfPlanet('pluto', DWARF_PLANET_RAW_DATA.pluto),
+  buildDwarfPlanet('ceres', DWARF_PLANET_RAW_DATA.ceres),
+  buildDwarfPlanet('haumea', DWARF_PLANET_RAW_DATA.haumea),
+  buildDwarfPlanet('makemake', DWARF_PLANET_RAW_DATA.makemake),
+  buildDwarfPlanet('eris', DWARF_PLANET_RAW_DATA.eris),
+];
+
 export const MOONS: CelestialBody[] = [
-  buildCelestialBody('moon', MOON_RAW_DATA.moon, 'moon', 'moon'),
+  buildMoon('moon', MOON_RAW_DATA.moon),
+  buildMoon('io', MOON_RAW_DATA.io),
+  buildMoon('europa', MOON_RAW_DATA.europa),
+  buildMoon('ganymede', MOON_RAW_DATA.ganymede),
+  buildMoon('callisto', MOON_RAW_DATA.callisto),
+  buildMoon('titan', MOON_RAW_DATA.titan),
+  buildMoon('triton', MOON_RAW_DATA.triton),
+  buildMoon('titania', MOON_RAW_DATA.titania),
+  buildMoon('oberon', MOON_RAW_DATA.oberon),
+  buildMoon('miranda', MOON_RAW_DATA.miranda),
+  buildMoon('ariel', MOON_RAW_DATA.ariel),
+  buildMoon('umbriel', MOON_RAW_DATA.umbriel),
 ];
 
 // All celestial bodies indexed by ID
 export const CELESTIAL_BODIES: Record<string, CelestialBody> = {
   [SUN.id]: SUN,
   ...Object.fromEntries(PLANETS.map(p => [p.id, p])),
+  ...Object.fromEntries(DWARF_PLANETS.map(d => [d.id, d])),
   ...Object.fromEntries(MOONS.map(m => [m.id, m])),
 };
 
 // All bodies as array
-export const ALL_BODIES = [SUN, ...PLANETS, ...MOONS];
+export const ALL_BODIES = [SUN, ...PLANETS, ...DWARF_PLANETS, ...MOONS];
 
 // Bodies that orbit the sun (for root-level rendering)
-export const ROOT_BODIES = [SUN, ...PLANETS];
+export const ROOT_BODIES = [SUN, ...PLANETS, ...DWARF_PLANETS];
 
 // Saturn has rings - special case
 export const SATURN_RING = {

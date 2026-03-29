@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { useTexture } from '@react-three/drei';
 import * as THREE from 'three';
@@ -14,7 +14,7 @@ interface CelestialBodyProps {
 
 // Check if textureUrl is actually a color (for placeholder bodies)
 function isColorUrl(url: string): boolean {
-  return url.startsWith('#') || url.length === 7 || url.length === 9;
+  return url.startsWith('#');
 }
 
 export function CelestialBody({ body, onClick }: CelestialBodyProps) {
@@ -67,6 +67,16 @@ export function CelestialBody({ body, onClick }: CelestialBodyProps) {
 
   const isSun = body.type === 'star';
 
+  // Create material for placeholder-colored bodies
+  const placeholderMaterial = useMemo(() => {
+    if (!isPlaceholder) return null;
+    return new THREE.MeshStandardMaterial({
+      color: body.textureUrl,
+      roughness: 0.8,
+      metalness: 0.1,
+    });
+  }, [isPlaceholder, body.textureUrl]);
+
   return (
     <group ref={groupRef}>
       <mesh
@@ -80,7 +90,7 @@ export function CelestialBody({ body, onClick }: CelestialBodyProps) {
         {isSun ? (
           <meshBasicMaterial map={texture} />
         ) : isPlaceholder ? (
-          <meshStandardMaterial color={body.textureUrl} roughness={0.8} metalness={0.1} />
+          <primitive object={placeholderMaterial!} attach="material" />
         ) : (
           <meshStandardMaterial map={texture} />
         )}
