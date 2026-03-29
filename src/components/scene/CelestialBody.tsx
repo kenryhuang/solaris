@@ -12,14 +12,20 @@ interface CelestialBodyProps {
   onClick?: () => void;
 }
 
+// Check if textureUrl is actually a color (for placeholder bodies)
+function isColorUrl(url: string): boolean {
+  return url.startsWith('#') || url.length === 7 || url.length === 9;
+}
+
 export function CelestialBody({ body, onClick }: CelestialBodyProps) {
   const meshRef = useRef<THREE.Mesh>(null);
   const groupRef = useRef<THREE.Group>(null);
 
   const { isPaused, elapsedTime, rotationMultiplier, orbitMultiplier, timeScale } = useSimulationStore();
 
-  // Load texture (R3F handles sRGB color space automatically for textures)
-  const texture = useTexture(body.textureUrl);
+  // Load texture if available, otherwise use placeholder color
+  const isPlaceholder = isColorUrl(body.textureUrl);
+  const texture = isPlaceholder ? null : useTexture(body.textureUrl);
 
   // Animation frame
   useFrame((_, delta) => {
@@ -73,6 +79,8 @@ export function CelestialBody({ body, onClick }: CelestialBodyProps) {
         <sphereGeometry args={[body.renderRadius, 64, 64]} />
         {isSun ? (
           <meshBasicMaterial map={texture} />
+        ) : isPlaceholder ? (
+          <meshStandardMaterial color={body.textureUrl} roughness={0.8} metalness={0.1} />
         ) : (
           <meshStandardMaterial map={texture} />
         )}
