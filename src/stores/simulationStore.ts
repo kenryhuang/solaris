@@ -16,6 +16,7 @@ const DEFAULT_CONFIG = {
   orbitMultiplier: 1,
   isPaused: false,
   elapsedTime: 0,
+  rotationTime: 0,
 };
 
 export const useSimulationStore = create<SimulationState & SimulationActions>((set, get) => ({
@@ -25,6 +26,7 @@ export const useSimulationStore = create<SimulationState & SimulationActions>((s
   orbitMultiplier: DEFAULT_CONFIG.orbitMultiplier,
   isPaused: DEFAULT_CONFIG.isPaused,
   elapsedTime: DEFAULT_CONFIG.elapsedTime,
+  rotationTime: DEFAULT_CONFIG.rotationTime,
 
   // Actions
   setTimeScale: (scale) => set({ timeScale: Math.max(0.01, Math.min(100, scale)) }),
@@ -34,7 +36,20 @@ export const useSimulationStore = create<SimulationState & SimulationActions>((s
   advanceTime: (deltaSeconds) => {
     const state = get();
     if (state.isPaused) return;
-    set({ elapsedTime: state.elapsedTime + deltaSeconds * state.timeScale * state.orbitMultiplier });
+
+    // Both clocks are expressed in *simulated days* and are advanced from the
+    // same real-time delta through the same `timeScale`. That shared time base
+    // is what keeps self-rotation synchronised with orbital revolution:
+    // 1 simulated day always equals 1 Earth turn *and* 1/365.256 of its orbit,
+    // independent of frame rate, pause state or the days-per-second setting.
+    // `rotationMultiplier` / `orbitMultiplier` remain user-facing exaggeration
+    // knobs and default to 1, i.e. physically faithful.
+    const simulatedDays = deltaSeconds * state.timeScale;
+
+    set({
+      elapsedTime: state.elapsedTime + simulatedDays * state.orbitMultiplier,
+      rotationTime: state.rotationTime + simulatedDays * state.rotationMultiplier,
+    });
   },
-  resetTime: () => set({ elapsedTime: 0 }),
+  resetTime: () => set({ elapsedTime: 0, rotationTime: 0 }),
 }));

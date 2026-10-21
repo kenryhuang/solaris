@@ -30,8 +30,8 @@ export function SolarSystem() {
       {/* Background */}
       <StarField />
 
-      {/* Ambient light for non-sun bodies */}
-      <ambientLight intensity={0.1} />
+      {/* Ambient light so night sides stay visible (physically they'd be pitch black) */}
+      <ambientLight intensity={0.6} />
 
       {/* Sun, planets, and dwarf planets */}
       {ROOT_BODIES.map((body) => (
@@ -56,9 +56,10 @@ export function SolarSystem() {
           <group key={moon.id}>
             <CelestialBody
               body={moon}
+              parent={parent}
               onClick={() => handleBodyClick(moon.id)}
             />
-            <OrbitLine body={moon} color="#333333" />
+            <OrbitLine body={moon} parent={parent} color="#333333" />
           </group>
         );
       })}

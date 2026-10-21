@@ -1,13 +1,16 @@
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
-import { Suspense } from 'react';
+import { Suspense, useRef } from 'react';
 import { SolarSystem } from './components/scene/SolarSystem';
+import { CameraFocusController } from './components/scene/CameraFocusController';
 import { ControlPanel } from './components/ui/ControlPanel';
 import { InfoPanel } from './components/ui/InfoPanel';
 import { CelestialSelector } from './components/ui/CelestialSelector';
 import { LoadingScreen } from './components/scene/LoadingScreen';
 
 export default function App() {
+  const controlsRef = useRef<React.ComponentRef<typeof OrbitControls> | null>(null);
+
   return (
     <div className="w-screen h-screen bg-black">
       <Canvas
@@ -22,11 +25,13 @@ export default function App() {
           <SolarSystem />
         </Suspense>
         <OrbitControls
+          ref={controlsRef}
           enableDamping
           dampingFactor={0.05}
           minDistance={1}
           maxDistance={200}
         />
+        <CameraFocusController controlsRef={controlsRef} />
       </Canvas>
 
       <LoadingScreen />

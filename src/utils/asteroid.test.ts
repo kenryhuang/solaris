@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { generateAsteroidPositions, generateAsteroidSizes, ASTEROID_BELT_CONFIG } from './asteroid';
+import { scaleDistance } from './scale';
 
 describe('generateAsteroidPositions', () => {
   it('generates correct number of positions', () => {
@@ -9,8 +10,8 @@ describe('generateAsteroidPositions', () => {
 
   it('positions are within asteroid belt range', () => {
     const positions = generateAsteroidPositions(50);
-    const scaledInner = ASTEROID_BELT_CONFIG.innerRadius * 1e-9;
-    const scaledOuter = ASTEROID_BELT_CONFIG.outerRadius * 1e-9;
+    const scaledInner = scaleDistance(ASTEROID_BELT_CONFIG.innerRadius);
+    const scaledOuter = scaleDistance(ASTEROID_BELT_CONFIG.outerRadius);
 
     positions.forEach(([x, y, z]) => {
       const distance = Math.sqrt(x * x + y * y + z * z);

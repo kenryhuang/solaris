@@ -227,7 +227,9 @@ const MOON_RAW_DATA = {
     radius: 1353.4,
     semiMajorAxis: 354759,
     orbitalPeriod: -5.877,        // Retrograde orbit
-    rotationPeriod: 5.877,
+    rotationPeriod: -5.877,       // Tidally locked: spin must match the retrograde orbit,
+                                  // otherwise the moon rotates opposite to its revolution
+
     eccentricity: 0.000016,
     inclination: 156.885,
     axialTilt: 0,

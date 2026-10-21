@@ -31,7 +31,8 @@ export interface SimulationState {
   rotationMultiplier: number;
   orbitMultiplier: number;
   isPaused: boolean;
-  elapsedTime: number;      // Total simulated time in days
+  elapsedTime: number;      // Total simulated time in days (drives orbital revolution)
+  rotationTime: number;     // Total simulated time in days (drives self-rotation)
 }
 
 export interface SelectionState {
