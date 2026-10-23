@@ -111,6 +111,7 @@ export function CelestialBody({ body, parent, onClick }: CelestialBodyProps) {
     <group ref={groupRef}>
       <mesh
         ref={meshRef}
+        name={`body:${body.id}`}
         onClick={(e) => {
           e.stopPropagation();
           onClick?.();

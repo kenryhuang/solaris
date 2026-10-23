@@ -55,9 +55,22 @@ export function OrbitLine({ body, parent, color = '#444444', segments = 128 }: O
 
   if (points.length === 0) return null;
 
+  // Name carries the true scaled orbit radius so the rendered AU proportions
+  // are machine-readable from the scene graph (e.g. "orbit:mars:r=12.18").
+  const scaledAxis = body.type === 'moon' && parent
+    ? scaleMoonDistance(body.semiMajorAxis, parent.renderRadius)
+    : scaleDistance(body.semiMajorAxis);
+
   return (
     <group ref={groupRef}>
-      <Line points={points} color={color} lineWidth={1} opacity={0.5} transparent />
+      <Line
+        name={`orbit:${body.id}:r=${scaledAxis.toFixed(3)}`}
+        points={points}
+        color={color}
+        lineWidth={1}
+        opacity={0.5}
+        transparent
+      />
     </group>
   );
 }

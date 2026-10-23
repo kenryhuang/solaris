@@ -15,7 +15,12 @@ export default function App() {
     <div className="w-screen h-screen bg-black">
       <Canvas
         camera={{
-          position: [50, 30, 50],
+          // Nearly top-down and close to the inner system so the true AU
+          // orbit proportions (linear scale: Mercury 0.387x, Mars 1.52x
+          // Earth's radius) are visually obvious — from a distant tilted
+          // view the inner planets collapse into an indistinguishable
+          // cluster around the Sun. Users can zoom out for the outer system.
+          position: [0, 24, 3],
           fov: 60,
           near: 0.1,
           far: 1000,
@@ -29,7 +34,7 @@ export default function App() {
           enableDamping
           dampingFactor={0.05}
           minDistance={1}
-          maxDistance={200}
+          maxDistance={400}
         />
         <CameraFocusController controlsRef={controlsRef} />
       </Canvas>
