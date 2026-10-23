@@ -3,8 +3,8 @@ export const SCALE_CONFIG = {
   planetSizeBase: 0.5,      // Earth's render radius (sqrt-compressed radius scale)
   sunSize: 2.0,             // Sun render radius (kept below Mercury's perihelion, ~2.46 units)
   earthRadiusKm: 6371,      // Reference radius for the sqrt-compressed planet size scale
-  moonOrbitMargin: 0.9,     // Minimum clearance beyond the parent's surface, in render units
-  moonDistanceSpread: 1.4,  // Render units per sqrt(million km) of moon distance
+  moonOrbitMargin: 0.7,     // Minimum clearance beyond the parent's surface, in render units
+  moonDistanceSpread: 1.2,  // Render units per sqrt(million km) of moon distance
 };
 
 const AU_KM = 149_597_870.7;
@@ -61,12 +61,14 @@ export function scaleRadius(realRadiusKm: number, isSun: boolean = false): numbe
  *
  * Every moon orbits outside its parent's surface with a clearly visible
  * gap, siblings stay ordered by true distance, and each system stays
- * compact. The margin/spread are tuned so the Moon (~2.27 units, ~2.39 at
+ * compact. The margin/spread are tuned so the Moon (~1.94 units, ~2.05 at
  * apogee) reads as a clearly separate body rather than grazing Earth's
- * surface, while always staying closer to Earth than any planet ever gets:
- * the tightest approach is Mars at opposition — Mars perihelion ~11.0 vs
- * Earth aphelion ~8.1 leaves ~2.9 units of clearance (Mercury never gets
- * closer than ~4.1).
+ * surface, while staying *unambiguously* closer to Earth than any planet
+ * ever gets: the tightest approach is Mars at opposition — Mars perihelion
+ * ~11.0 vs Earth aphelion ~8.1 leaves ~2.9 units of clearance (Mercury
+ * never gets closer than ~4.1), so even at apogee the Moon is ~30% closer
+ * than Mars' best case — a gap large enough to survive perspective
+ * foreshortening and visual misjudgment.
  *
  * Regression note 1: the original formula (`parentRadius * 2.2 + 0.9 *
  * sqrt(d / 1e6 km)`) put the Moon at ~1.66 units from Earth — under the old
@@ -76,9 +78,14 @@ export function scaleRadius(realRadiusKm: number, isSun: boolean = false): numbe
  * Regression note 2: the first fix (margin 0.05, spread 0.35) pulled the
  * Moon in to ~0.77 units — only ~0.27 units above Earth's 0.5-unit surface,
  * so the Moon looked glued to Earth. Margin 0.4 / spread 1.0 (~1.52 units)
- * still rendered nearly touching Earth at typical camera zoom, so margin
- * 0.9 / spread 1.4 opens a clearly visible gap (~2.27 units) while keeping
- * the Moon well inside Mars' closest approach (~2.9 units).
+ * still rendered nearly touching Earth at typical camera zoom.
+ *
+ * Regression note 3: margin 0.9 / spread 1.4 put the Moon at ~2.27 units
+ * (~2.39 at apogee) — technically inside Mars' closest approach (~2.9) but
+ * only by ~20%, so in screenshots the Moon could be misjudged as farther
+ * from Earth than Mars. Margin 0.7 / spread 1.2 (~1.94 units, ~2.05 at
+ * apogee) keeps a clearly visible gap from Earth's surface (~1.2 units of
+ * clear space, ~2.4 Earth radii) while sitting ~30% inside Mars' minimum.
  */
 export function scaleMoonDistance(distanceKm: number, parentRenderRadius: number): number {
   if (distanceKm <= 0) return 0;
